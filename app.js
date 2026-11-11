@@ -20,20 +20,21 @@ function renderLanding() {
   const l = data.landing || defaults.landing;
   $("landing-title").textContent = text(l.title?.es, l.title?.en);
   $("landing-subtitle").textContent = text(l.subtitle?.es, l.subtitle?.en);
-  $("landing-kicker").textContent = lang === "es" ? "PORTFOLIO PERSONAL" : "PERSONAL PORTFOLIO";
+  $("landing-kicker").textContent = lang === "es" ? "UN PEQUEÑO ESPACIO CREATIVO" : "A LITTLE CREATIVE SPACE";
   $("enter-button").textContent = text(l.enter?.es, l.enter?.en);
   const media = $("landing-media"); media.replaceChildren();
   if (l.animationUrl) {
     if (l.animationType === "image") { const img = document.createElement("img"); img.src = l.animationUrl; img.alt = ""; media.append(img); }
     else { const video = document.createElement("video"); video.src = l.animationUrl; video.autoplay = true; video.muted = true; video.loop = true; video.playsInline = true; media.append(video); }
   }
-  document.querySelectorAll(".lang-toggle").forEach(b => b.textContent = lang === "es" ? "EN ↗" : "ES ↗");
+  document.querySelectorAll(".lang-toggle").forEach(b => b.textContent = lang === "es" ? "EN" : "ES");
 }
 function renderHub() {
-  $("brand").textContent = data.landing?.title?.[lang] || (lang === "es" ? "Portfolio" : "Portfolio");
-  $("admin-open").hidden = !session;
+  $("brand").textContent = data.landing?.title?.[lang] || "Portfolio";
+  $("admin-open").hidden = false;
   const pages = Array.isArray(data.pages) ? data.pages : [];
   $("page-nav").innerHTML = `<a href="#home" class="${currentPage === "home" ? "active" : ""}">${lang === "es" ? "Inicio" : "Home"}</a>` + pages.map(p => `<a href="#page/${encodeURIComponent(p.slug)}" class="${currentPage === p.slug ? "active" : ""}">${esc(text(p.titleEs,p.titleEn))}</a>`).join("");
+  $("admin-open").textContent = session ? (lang === "es" ? "Editar sitio" : "Edit site") : (lang === "es" ? "Administrar" : "Admin");
   const content = $("page-content");
   if (currentPage !== "home") {
     const page = pages.find(p => p.slug === currentPage);
@@ -42,30 +43,28 @@ function renderHub() {
     const categories = Array.isArray(data.categories) ? data.categories : [];
     const projects = Array.isArray(data.projects) ? data.projects : [];
     const categoryNames = [...new Set([...categories.map(c => text(c.nameEs,c.nameEn)), ...projects.map(p => text(p.categoryEs,p.categoryEn)).filter(Boolean)])];
-    let selected = "all";
-    const cards = projects.map((p,i) => ({p,i})).filter(({p}) => selected === "all" || text(p.categoryEs,p.categoryEn) === selected);
-    content.innerHTML = `<section class="hub-intro"><p class="eyebrow">${lang === "es" ? "UN POCO DE TODO LO QUE HAGO" : "A LITTLE OF EVERYTHING I DO"}</p><h1>${lang === "es" ? "Ideas hechas visibles." : "Ideas made visible."}</h1><p>${esc(text(data.about?.es,data.about?.en))}</p></section>
-      <section class="work-section"><div class="section-heading"><div><p class="eyebrow">${lang === "es" ? "SELECCIÓN" : "SELECTED WORK"}</p><h2>${lang === "es" ? "Proyectos" : "Projects"}</h2></div><span class="project-count">${String(projects.length).padStart(2,"0")}</span></div>
+    content.innerHTML = `<section class="hub-intro"><span class="intro-sticker" aria-hidden="true">♡</span><p class="eyebrow">${lang === "es" ? "HOLA, QUÉ BUENO TENERTE AQUÍ" : "HELLO, SO HAPPY YOU'RE HERE"}</p><h1>${lang === "es" ? "Un mundo hecho a mi manera." : "A little world, made my way."}</h1><p>${esc(text(data.about?.es,data.about?.en))}</p></section>
+      <section class="work-section"><div class="section-heading"><div><p class="eyebrow">${lang === "es" ? "COSITAS QUE HE CREADO" : "LITTLE THINGS I'VE MADE"}</p><h2>${lang === "es" ? "Mi portfolio" : "My portfolio"}</h2></div><span class="project-count">♡ ${String(projects.length).padStart(2,"0")}</span></div>
       <div class="filters"><button class="filter active" data-filter="all">${lang === "es" ? "Todo" : "All"}</button>${categoryNames.map(n => `<button class="filter" data-filter="${esc(n)}">${esc(n)}</button>`).join("")}</div>
-      <div class="project-grid">${cards.map(({p,i}) => projectCard(p,i)).join("")}</div>${projects.length ? "" : `<p class="empty-state">${lang === "es" ? "Tus proyectos aparecerán aquí. Entra al editor para añadir el primero." : "Your projects will appear here. Open the editor to add your first one."}</p>`}</section>
-      <section class="links-section"><div><p class="eyebrow">${lang === "es" ? "ENCUÉNTRAME" : "FIND ME"}</p><h2>${lang === "es" ? "También estoy por aquí." : "I'm also around here."}</h2></div><div class="links-list">${(data.links || []).map(x => `<a href="${esc(safeUrl(x.url))}" target="_blank" rel="noreferrer">${esc(text(x.labelEs,x.labelEn))}<span>↗</span></a>`).join("")}</div></section>`;
+      <div class="project-grid">${projects.map((p,i) => projectCard(p,i)).join("")}</div>${projects.length ? "" : `<p class="empty-state">${lang === "es" ? "Tus proyectos aparecerán aquí. Inicia sesión para añadir el primero ♡" : "Your projects will appear here. Sign in to add the first one ♡"}</p>`}</section>
+      <section class="links-section"><div><p class="eyebrow">${lang === "es" ? "NOS VEMOS POR AHÍ" : "SEE YOU AROUND"}</p><h2>${lang === "es" ? "Mis rinconcitos online" : "My little corners online"}</h2></div><div class="links-list">${(data.links || []).map(x => `<a href="${esc(safeUrl(x.url))}" target="_blank" rel="noreferrer">${esc(text(x.labelEs,x.labelEn))}<span>↗</span></a>`).join("")}</div></section>`;
     content.querySelectorAll(".filter").forEach(btn => btn.addEventListener("click", () => { content.querySelectorAll(".filter").forEach(x=>x.classList.remove("active")); btn.classList.add("active"); content.querySelectorAll(".project-card").forEach(card=>card.hidden = btn.dataset.filter !== "all" && card.dataset.category !== btn.dataset.filter); }));
   }
-  $("footer").innerHTML = `<span>© ${new Date().getFullYear()} ${esc(data.landing?.title?.[lang] || "Portfolio")}</span><span>${lang === "es" ? "Hecho con intención." : "Made with intention."}</span>`;
+  $("footer").innerHTML = `<span>© ${new Date().getFullYear()} ${esc(data.landing?.title?.[lang] || "Portfolio")}</span><span>${lang === "es" ? "hecho con cariño ♡" : "made with love ♡"}</span>`;
 }
 function projectCard(p,i) {
   const cat = text(p.categoryEs,p.categoryEn), title = text(p.titleEs,p.titleEn);
-  const image = p.image ? `<img src="${esc(safeUrl(p.image))}" alt="${esc(title)}" loading="lazy">` : `<div class="image-placeholder"><span>0${i+1}</span></div>`;
+  const image = p.image ? `<img src="${esc(safeUrl(p.image))}" alt="${esc(title)}" loading="lazy">` : `<div class="image-placeholder"><span>♡</span></div>`;
   const body = `<div class="project-image">${image}<span class="project-arrow">↗</span></div><div class="project-meta"><div><h3>${esc(title || (lang === "es" ? "Proyecto sin título" : "Untitled project"))}</h3><p>${esc(text(p.descriptionEs,p.descriptionEn))}</p></div><span class="project-category">${esc(cat)}</span></div>`;
   return `<article class="project-card" data-category="${esc(cat)}">${p.url ? `<a href="${esc(safeUrl(p.url))}" target="_blank" rel="noreferrer">${body}</a>` : body}</article>`;
 }
 function render() { renderLanding(); renderHub(); }
-function enterHub() { $("landing").classList.add("hidden"); $("hub").classList.remove("hidden"); location.hash = "home"; }
+function enterHub() { $("landing").classList.add("hidden"); $("hub").classList.remove("hidden"); if(location.hash !== "#home") location.hash = "home"; }
 function route() { const match = location.hash.match(/^#page\/(.+)$/); if (match) { currentPage = decodeURIComponent(match[1]); enterHub(); renderHub(); } else if (location.hash === "#home") { currentPage = "home"; enterHub(); renderHub(); } }
 async function loadContent() {
   if (!db) return;
   try { const {data: row,error} = await db.from("portfolio_site").select("content").eq("id",1).maybeSingle(); if (error) throw error; if (row?.content) data = {...structuredClone(defaults), ...row.content}; }
-  catch (e) { console.error(e); toast("Could not load saved portfolio content."); }
+  catch (e) { console.error(e); toast("No se pudo cargar el contenido guardado."); }
 }
 function fillEditor() {
   const l = data.landing || defaults.landing;
@@ -80,20 +79,20 @@ function editorContent() {
 }
 async function save() {
   const status=$("save-status");
-  try { const next=editorContent(); if (!db) throw new Error("Connect Supabase first. See README for setup."); $("save-button").disabled=true; status.textContent="Saving…";
+  try { const next=editorContent(); if (!db) throw new Error("Configura Supabase (consulta README.md) para guardar los cambios de forma privada."); $("save-button").disabled=true; status.textContent="Guardando…";
     const {error}=await db.from("portfolio_site").upsert({id:1,content:next,updated_at:new Date().toISOString()},{onConflict:"id"}); if(error) throw error;
-    data=next; render(); status.textContent="Saved successfully."; toast("Portfolio updated.");
+    data=next; render(); status.textContent="Cambios guardados."; toast("Portfolio actualizado ♡");
   } catch(e) { status.textContent=e.message; } finally { $("save-button").disabled=false; }
 }
-async function initAuth() { if(!db) return; const {data:result}=await db.auth.getSession(); session=result.session; db.auth.onAuthStateChange((_event,s)=>{session=s; $("admin-open").hidden=!session;}); }
+async function initAuth() { if(!db) return; const {data:result}=await db.auth.getSession(); session=result.session; db.auth.onAuthStateChange((_event,s)=>{session=s; $("admin-open").textContent=session?(lang==="es"?"Editar sitio":"Edit site"):(lang==="es"?"Administrar":"Admin");}); }
 $("enter-button").addEventListener("click",enterHub);
 document.querySelectorAll(".lang-toggle").forEach(b=>b.addEventListener("click",()=>setLang(lang==="es"?"en":"es")));
 $("brand").addEventListener("click",()=>{currentPage="home";});
-$("admin-open").addEventListener("click",()=>{fillEditor(); $("editor-dialog").showModal();});
-$("login-form").addEventListener("submit",async e=>{e.preventDefault(); const f=new FormData(e.currentTarget); const errorEl=$("login-error"); if(!db){errorEl.textContent="Supabase is not configured. See README.";return;} const {data:result,error}=await db.auth.signInWithPassword({email:f.get("email"),password:f.get("password")}); if(error){errorEl.textContent=error.message;return;} session=result.session; $("login-dialog").close(); $("admin-open").hidden=false; fillEditor(); $("editor-dialog").showModal(); });
+$("admin-open").addEventListener("click",()=>{if(session){fillEditor();$("editor-dialog").showModal();}else{$("login-error").textContent="";$("login-dialog").showModal();}});
+$("login-form").addEventListener("submit",async e=>{e.preventDefault(); const f=new FormData(e.currentTarget); const errorEl=$("login-error"); if(!db){errorEl.textContent="Primero configura Supabase siguiendo README.md.";return;} const entered=String(f.get("email")||"").trim(); const username=config.adminUsername||"emiitheadmin"; const email=(entered.toLowerCase()===username.toLowerCase()?config.adminEmail:entered); if(!email||email.includes("YOUR_")){errorEl.textContent="Configura adminEmail en config.js con el correo de tu usuario Supabase.";return;} const {data:result,error}=await db.auth.signInWithPassword({email,password:f.get("password")}); if(error){errorEl.textContent="No se pudo iniciar sesión. Revisa tus credenciales.";return;} session=result.session; $("login-dialog").close(); fillEditor(); $("editor-dialog").showModal(); renderHub(); });
 $("editor-form").addEventListener("submit",e=>{e.preventDefault();save();});
-$("logout-button").addEventListener("click",async()=>{if(db) await db.auth.signOut(); session=null; $("editor-dialog").close(); $("admin-open").hidden=true;toast("Signed out.");});
+$("logout-button").addEventListener("click",async()=>{if(db) await db.auth.signOut(); session=null; $("editor-dialog").close(); renderHub();toast("Sesión cerrada.");});
 document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>$(b.dataset.close).close()));
-$("image-upload").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;const status=$("upload-status");if(!db||!session){status.textContent="Sign in and connect Supabase to upload images.";return;}status.textContent="Uploading…";const path=`${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,"-")}`;const {error}=await db.storage.from("portfolio-media").upload(path,file,{cacheControl:"3600",upsert:false});if(error){status.textContent=error.message;return;}const {data:result}=db.storage.from("portfolio-media").getPublicUrl(path);await navigator.clipboard?.writeText(result.publicUrl);status.innerHTML=`Uploaded. URL copied: <code>${esc(result.publicUrl)}</code>`;toast("Image uploaded; URL copied.");e.target.value="";});
+$("image-upload").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;const status=$("upload-status");if(!db||!session){status.textContent="Inicia sesión y configura Supabase para subir imágenes.";return;}status.textContent="Subiendo…";const path=`${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,"-")}`;const {error}=await db.storage.from("portfolio-media").upload(path,file,{cacheControl:"3600",upsert:false});if(error){status.textContent=error.message;return;}const {data:result}=db.storage.from("portfolio-media").getPublicUrl(path);await navigator.clipboard?.writeText(result.publicUrl);status.textContent=`Imagen subida; URL copiada: ${result.publicUrl}`;toast("Imagen subida ♡");e.target.value="";});
 window.addEventListener("hashchange",route);
-(async()=>{await loadContent();await initAuth();render();if(location.hash)route();if(!hasSupabase){$("admin-open").hidden=false;$("admin-open").textContent="Admin setup ↗";$("admin-open").addEventListener("click",()=>$("login-dialog").showModal());}})();
+(async()=>{await loadContent();await initAuth();render();if(location.hash)route();})();

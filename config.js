@@ -1,5 +1,9 @@
 window.PORTFOLIO_CONFIG = {
-  // Add your Supabase project URL and anon/public key here (never put a service-role key here).
+  // Public client settings only. Never put a password or service-role key in this file.
   supabaseUrl: "YOUR_SUPABASE_PROJECT_URL",
-  supabaseAnonKey: "YOUR_SUPABASE_ANON_KEY"
+  supabaseAnonKey: "YOUR_SUPABASE_ANON_KEY",
+  // Optional username shortcut for the private Supabase account. Set adminEmail to the email
+  // of the account you create in Supabase; the password is verified by Supabase, not this site.
+  adminUsername: "emiitheadmin",
+  adminEmail: "YOUR_ADMIN_EMAIL@example.com"
 };

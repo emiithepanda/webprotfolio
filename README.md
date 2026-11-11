@@ -1,33 +1,25 @@
-# Editable portfolio — setup
+# Portfolio editable — configuración
 
-A bilingual (Spanish/English) portfolio with an animated landing screen, text-only enter button, project hub, categories and subcategories, custom pages, social links, image uploads, and a private admin editor.
+Portfolio bilingüe (español/inglés) con una portada animada, diseño cálido en naranja rosado y blanco pastel, proyectos, páginas, categorías, enlaces y editor privado dentro del sitio.
 
-## Important: private editing
+## Seguridad de acceso
 
-The website is public, but editing and uploads are protected by Supabase authentication and database/storage policies. Do **not** put a Supabase service-role key in the website. Only the public anon key belongs in `config.js`. There is no public sign-up form; create the single admin account yourself in Supabase.
+No guardes contraseñas en `app.js`, `config.js` ni en ningún archivo público: cualquiera puede inspeccionar esos archivos. La contraseña compartida en un chat debe considerarse expuesta; cámbiala y elige una nueva contraseña privada. El acceso de este sitio se valida con Supabase Auth y las políticas RLS; nunca se verifica una contraseña en el navegador.
 
-## 1. Create Supabase project and admin
+## 1. Configurar el acceso privado
 
-1. Create a project at [supabase.com](https://supabase.com/).
-2. In **Authentication → Users**, add your own email and a strong password. Do not enable public sign-ups.
-3. Copy your project's URL and anon/public key from **Project Settings → API**.
-4. Open `config.js` and set `supabaseUrl` and `supabaseAnonKey`.
+1. Crea un proyecto en [supabase.com](https://supabase.com/) y en **Authentication → Users** añade tu cuenta con correo y una contraseña nueva y privada. Desactiva los registros públicos.
+2. En `config.js`, añade el Project URL y la clave anon/public de **Project Settings → API**. Configura `adminEmail` con el correo exacto de esa cuenta. El atajo de usuario `emiitheadmin` se convierte a ese correo antes de iniciar sesión.
+3. En `supabase-schema.sql`, sustituye `YOUR_ADMIN_EMAIL@example.com` por el mismo correo y ejecuta el SQL completo en Supabase **SQL Editor**.
+4. Publica el sitio como web estática (por ejemplo, GitHub Pages). Abre **Administrar**, inicia sesión con el usuario configurado y tu contraseña privada. El contenido se edita desde el sitio.
 
-## 2. Create the private content store and image bucket
+La clave anon es pública por diseño; nunca incluyas una contraseña ni una clave service-role en el frontend. Las políticas del SQL permiten lectura pública del portfolio, pero solo el usuario autenticado con el correo autorizado puede cambiar contenido y subir imágenes.
 
-1. Open `supabase-schema.sql` and replace `YOUR_ADMIN_EMAIL@example.com` with the exact email for the admin account.
-2. Run the entire SQL file in Supabase **SQL Editor**.
-3. The SQL creates a public-read portfolio row, restricts edits to that authenticated email, and creates a public-read image bucket with uploads/deletes restricted to that email. The public anon key is safe to expose because row-level security is enabled.
+## Editar contenido
 
-## 3. Publish
+En el sitio inicia sesión y abre **Editar sitio**. Edita español e inglés y las listas JSON de páginas, categorías/subcategorías, proyectos y enlaces. Para proyectos, añade una imagen desde el botón de subida y copia la URL en el campo `image` del JSON. Puedes usar una URL de video en bucle o imagen/GIF para la portada.
 
-Serve the repository root as a static website (GitHub Pages works). For local testing, use a local web server rather than opening `index.html` directly, for example `python -m http.server`.
-
-## Edit your portfolio
-
-Open the site and click **Admin**, then sign in. The editor supports Spanish and English text and JSON lists for pages, categories/subcategories, projects, and links. Add a project image by uploading it; the URL is copied so you can paste it into that project's `image` field. To use a looping video on the intro screen, add a video URL and select “Looping video”; for a GIF or still, choose “Image / GIF”.
-
-Example project:
+Ejemplo de proyecto:
 
 ```json
 {
@@ -39,13 +31,7 @@ Example project:
   "subcategoryEn": "Identity",
   "descriptionEs": "Una identidad para una marca independiente.",
   "descriptionEn": "An identity for an independent brand.",
-  "image": "https://your-project.supabase.co/storage/v1/object/public/portfolio-media/your-image.jpg",
+  "image": "https://tu-proyecto.supabase.co/storage/v1/object/public/portfolio-media/imagen.jpg",
   "url": "https://example.com"
 }
 ```
-
-Category and subcategory names are used to organize projects; category filters appear automatically when you add projects. Page slugs should be unique and contain no spaces (for example `about` or `contact`).
-
-## Update the admin email
-
-If you change your admin email, update the email in the SQL policies and rerun the policy section after removing/replacing the old policies. Keep Supabase's Row Level Security enabled.

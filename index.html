@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101013">
-  <title>Portfolio — Studio</title>
+  <meta name="theme-color" content="#fffaf6">
+  <title>Portfolio — Mi espacio creativo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -21,7 +21,7 @@
         <p id="landing-subtitle" class="landing-subtitle"></p>
         <button id="enter-button" class="enter-button" type="button"></button>
       </div>
-      <button class="lang-toggle landing-lang" type="button" aria-label="Change language"></button>
+      <button class="lang-toggle landing-lang" type="button" aria-label="Cambiar idioma"></button>
     </main>
 
     <div id="hub" class="hub hidden">
@@ -30,7 +30,7 @@
         <nav id="page-nav" class="page-nav" aria-label="Pages"></nav>
         <div class="top-actions">
           <button class="lang-toggle text-button" type="button"></button>
-          <button id="admin-open" class="text-button admin-open" type="button" hidden>Admin ↗</button>
+          <button id="admin-open" class="text-button admin-open" type="button" hidden>Administrar</button>
         </div>
       </header>
       <main id="page-content" class="page-content"></main>
@@ -40,51 +40,51 @@
 
   <dialog id="login-dialog" class="dialog login-dialog">
     <form id="login-form" class="dialog-card">
-      <button class="dialog-close" type="button" data-close="login-dialog" aria-label="Close">×</button>
-      <p class="eyebrow">PRIVATE ACCESS</p>
-      <h2>Admin login</h2>
-      <label>Email<input name="email" type="email" autocomplete="username" required></label>
-      <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+      <button class="dialog-close" type="button" data-close="login-dialog" aria-label="Cerrar">×</button>
+      <p class="eyebrow">ACCESO PRIVADO</p>
+      <h2>Hola, Emii ♡</h2>
+      <label>Usuario o correo<input name="email" type="text" autocomplete="username" required></label>
+      <label>Contraseña<input name="password" type="password" autocomplete="current-password" required></label>
       <p id="login-error" class="form-error" role="alert"></p>
-      <button class="primary-button" type="submit">Sign in</button>
+      <button class="primary-button" type="submit">Iniciar sesión</button>
     </form>
   </dialog>
 
   <dialog id="editor-dialog" class="dialog editor-dialog">
     <form id="editor-form" class="editor-card">
       <div class="editor-heading">
-        <div><p class="eyebrow">PRIVATE STUDIO</p><h2>Portfolio editor</h2></div>
-        <button class="dialog-close" type="button" data-close="editor-dialog" aria-label="Close">×</button>
+        <div><p class="eyebrow">TU ESPACIO PRIVADO</p><h2>Editar mi portfolio ♡</h2></div>
+        <button class="dialog-close" type="button" data-close="editor-dialog" aria-label="Cerrar">×</button>
       </div>
-      <p class="editor-note">Edit the content in either language. Lists use JSON so you can create as many pages, categories, projects, and links as you need.</p>
+      <p class="editor-note">Edita el contenido en español e inglés. Las listas JSON permiten añadir páginas, categorías, proyectos y enlaces.</p>
       <div class="editor-grid">
-        <label>Landing title (ES)<input id="e-title-es"></label>
-        <label>Landing title (EN)<input id="e-title-en"></label>
-        <label>Subtitle (ES)<input id="e-subtitle-es"></label>
-        <label>Subtitle (EN)<input id="e-subtitle-en"></label>
-        <label>Enter button (ES)<input id="e-enter-es"></label>
-        <label>Enter button (EN)<input id="e-enter-en"></label>
-        <label>Landing animation URL <input id="e-animation" placeholder="Video, GIF, or image URL"></label>
-        <label>Landing animation type<select id="e-animation-type"><option value="video">Looping video</option><option value="image">Image / GIF</option></select></label>
-        <label>About text (ES)<textarea id="e-about-es" rows="3"></textarea></label>
-        <label>About text (EN)<textarea id="e-about-en" rows="3"></textarea></label>
+        <label>Título de portada (ES)<input id="e-title-es"></label>
+        <label>Título de portada (EN)<input id="e-title-en"></label>
+        <label>Subtítulo (ES)<input id="e-subtitle-es"></label>
+        <label>Subtítulo (EN)<input id="e-subtitle-en"></label>
+        <label>Botón de entrada (ES)<input id="e-enter-es"></label>
+        <label>Botón de entrada (EN)<input id="e-enter-en"></label>
+        <label>URL de animación<input id="e-animation" placeholder="URL de video, GIF o imagen"></label>
+        <label>Tipo de animación<select id="e-animation-type"><option value="video">Video en bucle</option><option value="image">Imagen / GIF</option></select></label>
+        <label>Texto sobre mí (ES)<textarea id="e-about-es" rows="3"></textarea></label>
+        <label>Texto sobre mí (EN)<textarea id="e-about-en" rows="3"></textarea></label>
       </div>
       <div class="json-editors">
-        <label>Pages — titleEs, titleEn, slug, bodyEs, bodyEn
+        <label>Páginas — titleEs, titleEn, slug, bodyEs, bodyEn
           <textarea id="e-pages" class="json-input" spellcheck="false"></textarea>
         </label>
-        <label>Categories — nameEs, nameEn, subcategories [{nameEs, nameEn}]
+        <label>Categorías — nameEs, nameEn, subcategories [{nameEs, nameEn}]
           <textarea id="e-categories" class="json-input" spellcheck="false"></textarea>
         </label>
-        <label>Portfolio projects — titleEs, titleEn, categoryEs, categoryEn, subcategoryEs, subcategoryEn, descriptionEs, descriptionEn, image, url
+        <label>Proyectos — titleEs, titleEn, categoryEs, categoryEn, subcategoryEs, subcategoryEn, descriptionEs, descriptionEn, image, url
           <textarea id="e-projects" class="json-input tall" spellcheck="false"></textarea>
         </label>
-        <label>Links — labelEs, labelEn, url
+        <label>Enlaces — labelEs, labelEn, url
           <textarea id="e-links" class="json-input" spellcheck="false"></textarea>
         </label>
       </div>
-      <div class="upload-row"><label class="upload-button">＋ Upload image<input id="image-upload" type="file" accept="image/*" hidden></label><span id="upload-status" aria-live="polite">Upload to get a URL for a project's <code>image</code> field.</span></div>
-      <div class="editor-actions"><button id="logout-button" class="text-button" type="button">Sign out</button><button id="save-button" class="primary-button" type="submit">Save changes</button></div>
+      <div class="upload-row"><label class="upload-button">＋ Subir imagen<input id="image-upload" type="file" accept="image/*" hidden></label><span id="upload-status" aria-live="polite">Al subir una imagen, se copia su URL para añadirla a un proyecto.</span></div>
+      <div class="editor-actions"><button id="logout-button" class="text-button" type="button">Cerrar sesión</button><button id="save-button" class="primary-button" type="submit">Guardar cambios</button></div>
       <p id="save-status" class="save-status" role="status"></p>
     </form>
   </dialog>
